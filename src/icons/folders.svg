@@ -1,0 +1,10 @@
+<svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-folder" viewBox="0 0 32 32">
+<path d="M14 4l4 4h14v22h-32v-26z"></path>
+</symbol>
+<symbol id="icon-folder-open" viewBox="0 0 32 32">
+<path d="M26 30l6-16h-26l-6 16zM4 12l-4 18v-26h9l4 4h13v4z"></path>
+</symbol>
+</defs>
+</svg>
