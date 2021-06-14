@@ -33,15 +33,14 @@ const App = () => {
   const [baseCategories, setBaseCategories] = useState(null);
   useEffect(() => {
     setAllCategories(data);
-    setBaseCategories(getBaseCategories());
+    setBaseCategories(getBaseCategories(data));
   }, []);
 
-  const getBaseCategories = () => {
+  const getBaseCategories = (data) => {
     return data
       .filter((category) => category.parent_id === 0)
       .map((category) => ({
         ...category,
-        baseCategory: true,
         subCategories: [],
         isOpen: false,
         path: [0],
