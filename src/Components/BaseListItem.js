@@ -7,9 +7,7 @@ const BaseListItem = ({ category, getSubCategories, closeCategory }) => {
   const closeOpenedCategory = () => closeCategory(category);
   return (
     <li className='categoriesListItem' id={category.id} key={category.id}>
-      <div
-        className='itemBlock'
-        onClick={getCategories}>
+      <div className='itemBlock' onClick={getCategories}>
         <svg className='icon'>
           <use
             href={
@@ -21,7 +19,7 @@ const BaseListItem = ({ category, getSubCategories, closeCategory }) => {
         </svg>
         <p className='title'>{category.name}</p>
       </div>
-      {category.isOpen && category.subCategories.length && (
+      {category.isOpen && !!category.subCategories.length && (
         <ul className='categoriesList'>
           {category.subCategories?.map((category) => (
             <BaseListItem

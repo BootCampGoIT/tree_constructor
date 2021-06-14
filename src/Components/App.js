@@ -26,6 +26,8 @@ const data = [
   { id: 17, parent_id: 14, name: "15" },
   { id: 18, parent_id: 14, name: "17" },
   { id: 19, parent_id: 14, name: "19" },
+  { id: 20, parent_id: 19, name: "headShot" },
+  { id: 21, parent_id: 18, name: "headShot2" },
 ];
 
 const App = () => {
@@ -61,7 +63,7 @@ const App = () => {
   };
 
   const getSubCategories = (id, level) => {
-    console.log("level :>> ", level);
+
     const getTree = (categories, level) => {
       level.splice(0, 1);
       if (level.length) {
