@@ -43,12 +43,24 @@ const App = () => {
         ...category,
         subCategories: [],
         isOpen: false,
-        path: [0],
+        level: [category.id],
       }));
   };
 
-  const closeCategory = (id, path = []) => {
-    if (!path.length) {
+  const getFilteredCategories = (parent_id) =>
+    allCategories
+      .filter((category) => category.parent_id === parent_id)
+      .map((category) => ({
+        ...category,
+        subCategories: [],
+        isOpen: false,
+        level: category.level
+          ? [category.id, ...category.level]
+          : [category.id, parent_id],
+      }));
+
+  const closeCategory = (id, level = []) => {
+    if (!level.length) {
       setBaseCategories((prevState) => [
         ...prevState.map((category) =>
           category.id === Number(id) ? { ...category, isOpen: false } : category
@@ -57,11 +69,59 @@ const App = () => {
     }
   };
 
-  const getSubCategories = (id, path = []) => {};
+  const getSubCategories = (categories, level = []) => {
+    console.log(`level`, level);
+    // newLevel.slice(1, newLevel.length - 1);
+    if (level.length === 1) {
+      const filteredCategories = getFilteredCategories(level[0]);
+      return setBaseCategories((prev) => [
+        ...prev.map((category) => {
+          return category.id === level[0]
+            ? {
+                ...category,
+                subCategories: [...filteredCategories],
+                isOpen: true,
+                level: [category.id],
+              }
+            : category;
+        }),
+      ]);
+    }
+
+    if (level.length > 1) {
+      const newLevel = [...level];
+      let result = [];
+
+      const getNewSubcategories = (categories, level = []) => {
+        // const newCategories = getFilteredCategories(level[0]);
+        if (level.length === 1) {
+          const filteredCategories = getFilteredCategories(level[0]);
+          return categories.map((category) => {
+            newLevel.splice(0, 1);
+            return category.id === level[0]
+              ? {
+                  ...category,
+                  subCategories: [...filteredCategories],
+                  isOpen: true,
+                  level: [category.id, ...level],
+                }
+              : category;
+          });
+        }
+      };
+
+      if (level.length > 1) {
+        return getNewSubcategories(result, newLevel);
+      }
+
+      // getSubCategories(level[0], level);
+      // newLevel.slice(1, newLevel.length - 1);
+    }
+  };
 
   return (
     <AppContainer>
-      <ul className='categoriesList'>
+      <ul className="categoriesList">
         {baseCategories?.map((category) => (
           <BaseListItem
             category={category}

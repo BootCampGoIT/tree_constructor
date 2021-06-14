@@ -2,14 +2,17 @@ import React from "react";
 import sprite from "../icons/folders.svg";
 
 const BaseListItem = ({ category, getSubCategories, closeCategory }) => {
-  const getCategories = () => getSubCategories(category.id, category.path);
-  const closeOpenedCategory = () => closeCategory(category.id, category.path);
+  const getCategories = () =>
+    getSubCategories(category.subCategories, category.level);
+  const closeOpenedCategory = () => closeCategory(category.id, category.level);
+
   return (
-    <li className='categoriesListItem' id={category.id} key={category.id}>
+    <li className="categoriesListItem" key={category.id}>
       <div
-        className='itemBlock'
-        onClick={category.isOpen ? closeOpenedCategory : getCategories}>
-        <svg className='icon'>
+        className="itemBlock"
+        onClick={category.isOpen ? closeOpenedCategory : getCategories}
+      >
+        <svg className="icon">
           <use
             href={
               !category.isOpen
@@ -18,17 +21,18 @@ const BaseListItem = ({ category, getSubCategories, closeCategory }) => {
             }
           />
         </svg>
-        <p className='title'>{category.name}</p>
+        <p className="title">{category.name}</p>
       </div>
       {category.isOpen && (
-        <ul className='categoriesList'>
-          {category.subCategories?.map((category) => (
-            <BaseListItem
-              category={category.subCategories}
-              getSubCategories={getSubCategories}
-              closeCategory={closeCategory}
-            />
-          ))}
+        <ul className="categoriesList">
+          {category?.subCategories.length &&
+            category.subCategories.map((category) => (
+              <BaseListItem
+                category={category}
+                getSubCategories={getSubCategories}
+                closeCategory={closeCategory}
+              />
+            ))}
         </ul>
       )}
     </li>
