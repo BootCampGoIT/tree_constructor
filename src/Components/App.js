@@ -43,21 +43,48 @@ const App = () => {
         ...category,
         subCategories: [],
         isOpen: false,
-        path: [0],
+        level: [category.parent_id, category.id],
       }));
   };
 
-  const closeCategory = (id, path = []) => {
-    if (!path.length) {
-      setBaseCategories((prevState) => [
-        ...prevState.map((category) =>
-          category.id === Number(id) ? { ...category, isOpen: false } : category
-        ),
-      ]);
-    }
+  const closeCategory = (category) => {};
+
+  const getFilteredCategories = (id, level) => {
+    return allCategories
+      .filter((category) => category.parent_id === id)
+      .map((category) => ({
+        ...category,
+        level: [...level, category.id],
+        subCategories: [],
+        isOpen: false,
+      }));
   };
 
-  const getSubCategories = (id, path = []) => {};
+  const getSubCategories = (id, level) => {
+    console.log("level :>> ", level);
+    const getTree = (categories, level) => {
+      level.splice(0, 1);
+      if (level.length) {
+        return categories.map((category) =>
+          category.id === level[0]
+            ? {
+                ...category,
+                subCategories: [
+                  ...getTree(
+                    getFilteredCategories(level[0], [...category.level]),
+                    level
+                  ),
+                ],
+                isOpen: true,
+              }
+            : category
+        );
+      }
+      return categories;
+    };
+    const res = getTree(baseCategories, [...level, id]);
+    setBaseCategories(res);
+  };
 
   return (
     <AppContainer>
@@ -76,3 +103,31 @@ const App = () => {
 };
 
 export default App;
+
+// if (level.length > 1) {
+//   const innerCategories = [
+//     ...categories.map((category) =>
+//       category.id === level[level.length - 1]
+//         ? {
+//             ...categories,
+//             subCategories: getMappedCategories(
+//               category.subCategories,
+//               category.level
+//             ),
+//           }
+//         : category
+//     ),
+//   ];
+// }
+// if (level.length === 1) {
+//   setBaseCategories((category) =>
+//     category.map((category) =>
+//       category.id === level[0]
+//         ? {
+//             ...category,
+//             subCategories: [...categories],
+//           }
+//         : category
+//     )
+//   );
+// }
